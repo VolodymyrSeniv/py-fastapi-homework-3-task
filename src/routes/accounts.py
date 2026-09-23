@@ -10,7 +10,6 @@ from config import get_jwt_auth_manager
 from database import (
     ActivationTokenModel,
     RefreshTokenModel,
-    UserGroupEnum,
     UserGroupModel,
     UserModel,
     get_db,

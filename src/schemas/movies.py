@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from typing import Optional
+
 from pydantic import BaseModel, Field, field_validator
 
 from database.models.movies import MovieStatusEnum
@@ -149,7 +149,7 @@ class MovieCreateSchema(BaseModel):
 
 class MovieUpdateSchema(BaseModel):
     name: str | None = None
-    date: Optional[date] = None
+    date: date | None = None
     score: float | None = Field(None, ge=0, le=100)
     overview: str | None = None
     status: MovieStatusEnum | None = None
