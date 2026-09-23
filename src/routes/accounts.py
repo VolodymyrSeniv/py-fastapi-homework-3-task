@@ -305,9 +305,7 @@ async def user_refresh(
             detail="Token has expired.",
         )
 
-
     user_id = payload.get("user_id")
-
 
     token_query = select(RefreshTokenModel).where(
         RefreshTokenModel.token == refresh_token_data.refresh_token
