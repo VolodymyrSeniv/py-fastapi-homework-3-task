@@ -6,7 +6,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from config import get_jwt_auth_manager
+from config import BaseAppSettings, get_jwt_auth_manager, get_settings
 from database import (
     ActivationTokenModel,
     RefreshTokenModel,
@@ -247,6 +247,7 @@ async def user_login(
     user_login_data: UserLoginRequestSchema,
     db: AsyncSession = Depends(get_db),
     jwt_manager: JWTAuthManagerInterface = Depends(get_jwt_auth_manager),
+    settings: BaseAppSettings = Depends(get_settings),
 ):
     user_query = select(UserModel).where(UserModel.email == user_login_data.email)
     user = (await db.execute(user_query)).scalars().first()
@@ -265,7 +266,7 @@ async def user_login(
         refresh_token = jwt_manager.create_refresh_token({"user_id": user.id})
         refresh_token_record = RefreshTokenModel.create(
             user_id=user.id,
-            days_valid=7,
+            days_valid=settings.LOGIN_TIME_DAYS,
             token=refresh_token,
         )
         db.add(refresh_token_record)
